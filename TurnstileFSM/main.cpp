@@ -1,5 +1,8 @@
 #include <Windows.h>
 #include "TurnstileFSM.h"
+#include "LockedState.h"
+#include "UnlockedState.h"
+#include "ViolationState.h"
 
 #define KEY1 0x31
 #define KEY2 0x32
@@ -12,7 +15,9 @@ int main()
 	bool running = true;
 	int previousInput = 0;
 
-	TurnstileFSM stateMachine;
+	LockedState startupState;
+	LockedState* ss_p = &startupState;
+	TurnstileFSM stateMachine(ss_p);
 
 	while (running)
 	{

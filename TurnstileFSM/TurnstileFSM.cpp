@@ -1,9 +1,9 @@
 #include "TurnstileFSM.h"
 
 
-TurnstileFSM::TurnstileFSM()
+TurnstileFSM::TurnstileFSM(TurnstileState* startupState)
 {
-
+	currentState = startupState;
 }
 
 TurnstileFSM::~TurnstileFSM()
@@ -11,22 +11,32 @@ TurnstileFSM::~TurnstileFSM()
 
 }
 
+void TurnstileFSM::setState(TurnstileState &newState)
+{
+	currentState = &newState;
+}
+
+TurnstileGate* TurnstileFSM::getTurnstile()
+{
+	return gate;
+}
+
 void TurnstileFSM::coinEvent()
 {
-	std::cout << "Coin!\n";
+	currentState->coin(this);
 }
 
 void TurnstileFSM::passEvent()
 {
-	std::cout << "Pass!\n";
+	currentState->pass(this);
 }
 
 void TurnstileFSM::resetEvent()
 {
-	std::cout << "Reset!\n";
+	currentState->reset(this);
 }
 
 void TurnstileFSM::readyEvent()
 {
-	std::cout << "Ready!\n";
+	currentState->ready(this);
 }
