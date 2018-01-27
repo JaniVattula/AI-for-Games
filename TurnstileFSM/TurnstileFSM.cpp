@@ -1,9 +1,9 @@
 #include "TurnstileFSM.h"
 
-
-TurnstileFSM::TurnstileFSM(TurnstileState* startupState)
+// Set the gate to be locked on creation.
+TurnstileFSM::TurnstileFSM() : currentState(&s_locked)
 {
-	currentState = startupState;
+
 }
 
 TurnstileFSM::~TurnstileFSM()
@@ -11,32 +11,71 @@ TurnstileFSM::~TurnstileFSM()
 
 }
 
-void TurnstileFSM::setState(TurnstileState &newState)
+void TurnstileFSM::setState(TurnstileState& newState)
 {
 	currentState = &newState;
 }
 
-TurnstileGate* TurnstileFSM::getTurnstile()
+void TurnstileFSM::stateMachine(Action action)
 {
-	return gate;
+	switch (action)
+	{
+		case Default:
+		{
+			std::cout << "No action performed.\n";
+			break;
+		}
+		case Lock:
+		{
+			gate.lock();
+			setState(s_locked);
+			break;
+		}
+		case Unlock:
+		{
+			gate.unlock();
+			setState(s_unlocked);
+			break;
+		}
+		case Alarm:
+		{
+			gate.alarm();
+			setState(s_violation);
+			break;
+		}
+		case Thank:
+		{
+			gate.thankYou();
+			break;
+		}
+		case Reset:
+		{
+			gate.resetAlarm();
+			break;
+		}
+	}
 }
 
 void TurnstileFSM::coinEvent()
 {
-	currentState->coin(this);
+	action = currentState->coin();
+	stateMachine(action);
 }
 
 void TurnstileFSM::passEvent()
 {
-	currentState->pass(this);
+	action = currentState->pass();
+	stateMachine(action);
 }
 
 void TurnstileFSM::resetEvent()
 {
-	currentState->reset(this);
+	action = currentState->reset();
+	stateMachine(action);
 }
 
 void TurnstileFSM::readyEvent()
 {
-	currentState->ready(this);
+	action = currentState->ready();
+	stateMachine(action);
 }

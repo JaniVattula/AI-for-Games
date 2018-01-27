@@ -1,6 +1,5 @@
 #include "ViolationState.h"
 
-
 ViolationState::ViolationState()
 {
 
@@ -11,22 +10,26 @@ ViolationState::~ViolationState()
 
 }
 
-void ViolationState::coin(TurnstileFSM* machine)
+Action ViolationState::coin()
 {
 	std::cout << "Violation - Coin: Event ignored, in Violation state.\n";
+	return Default;
 }
 
-void ViolationState::pass(TurnstileFSM* machine)
+Action ViolationState::pass()
 {
 	std::cout << "Violation - Pass: Event ignored, in Violation state.\n";
+	return Default;
 }
 
-void ViolationState::ready(TurnstileFSM* machine)
+Action ViolationState::ready()
 {
 	std::cout << "Violation - Ready\n";
+	return Lock;
 }
 
-void ViolationState::reset(TurnstileFSM* machine)
+Action ViolationState::reset()
 {
 	std::cout << "Violation - Reset\n";
+	return Reset;
 }

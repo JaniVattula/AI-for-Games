@@ -1,8 +1,5 @@
 #include <Windows.h>
 #include "TurnstileFSM.h"
-#include "LockedState.h"
-#include "UnlockedState.h"
-#include "ViolationState.h"
 
 #define KEY1 0x31
 #define KEY2 0x32
@@ -10,14 +7,16 @@
 #define KEY4 0x34
 #define ESC 0x1B
 
+// TODO:
+//	- Improve console readability and formatting
+//	- Make consecutive presses of the same key possible
+
 int main()
 {
 	bool running = true;
 	int previousInput = 0;
 
-	LockedState startupState;
-	LockedState* ss_p = &startupState;
-	TurnstileFSM stateMachine(ss_p);
+	TurnstileFSM stateMachine;
 
 	while (running)
 	{

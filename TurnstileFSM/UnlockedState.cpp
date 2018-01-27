@@ -10,22 +10,26 @@ UnlockedState::~UnlockedState()
 
 }
 
-void UnlockedState::coin(TurnstileFSM* machine)
+Action UnlockedState::coin()
 {
 	std::cout << "Unlocked - Coin\n";
+	return Thank;
 }
 
-void UnlockedState::pass(TurnstileFSM* machine)
+Action UnlockedState::pass()
 {
 	std::cout << "Unlocked - Pass\n";
+	return Lock;
 }
 
-void UnlockedState::ready(TurnstileFSM* machine)
+Action UnlockedState::ready()
 {
 	std::cout << "Unlocked - Ready\n";
+	return Default;
 }
 
-void UnlockedState::reset(TurnstileFSM* machine)
+Action UnlockedState::reset()
 {
 	std::cout << "Unlocked - Reset\n";
+	return Default;
 }

@@ -10,23 +10,26 @@ LockedState::~LockedState()
 
 }
 
-void LockedState::coin(TurnstileFSM* machine)
+Action LockedState::coin()
 {
 	std::cout << "Locked - Coin\n";
-	machine->getTurnstile()->unlock();
+	return Unlock;
 }
 
-void LockedState::pass(TurnstileFSM* machine)
+Action LockedState::pass()
 {
 	std::cout << "Locked - Pass\n";
+	return Alarm;
 }
 
-void LockedState::ready(TurnstileFSM* machine)
+Action LockedState::ready()
 {
 	std::cout << "Locked - Ready\n";
+	return Default;
 }
 
-void LockedState::reset(TurnstileFSM* machine)
+Action LockedState::reset()
 {
 	std::cout << "Locked - Reset\n";
+	return Default;
 }

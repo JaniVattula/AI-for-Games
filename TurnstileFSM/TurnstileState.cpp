@@ -11,22 +11,26 @@ TurnstileState::~TurnstileState()
 
 }
 
-void TurnstileState::coin(void*)
+Action TurnstileState::coin()
 {
 	std::cout << "COIN\n";
+	return Default;
 }
 
-void TurnstileState::pass(void*)
+Action TurnstileState::pass()
 {
 	std::cout << "PASS\n";
+	return Default;
 }
 
-void TurnstileState::ready(void*)
+Action TurnstileState::ready()
 {
 	std::cout << "READY\n";
+	return Default;
 }
 
-void TurnstileState::reset(void*)
+Action TurnstileState::reset()
 {
 	std::cout << "RESET\n";
+	return Default;
 }
