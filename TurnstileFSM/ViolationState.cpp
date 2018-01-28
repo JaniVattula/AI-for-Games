@@ -12,24 +12,24 @@ ViolationState::~ViolationState()
 
 Action ViolationState::coin()
 {
-	std::cout << "Violation - Coin: Event ignored, in Violation state.\n";
+	std::cout << "Previous state: Violation \nEvent: Coin \nEvent ignored, in Violation state.\n";
 	return Default;
 }
 
 Action ViolationState::pass()
 {
-	std::cout << "Violation - Pass: Event ignored, in Violation state.\n";
+	std::cout << "Previous state: Violation \nEvent: Pass \nEvent ignored, in Violation state.\n";
 	return Default;
 }
 
 Action ViolationState::ready()
 {
-	std::cout << "Violation - Ready\n";
+	std::cout << "Previous state: Violation \nEvent: Ready \nAlarm cleared, locking gate.\n";
 	return Lock;
 }
 
 Action ViolationState::reset()
 {
-	std::cout << "Violation - Reset\n";
+	std::cout << "Previous state: Violation \nEvent: Reset \nAlarm still active.\n";
 	return Reset;
 }

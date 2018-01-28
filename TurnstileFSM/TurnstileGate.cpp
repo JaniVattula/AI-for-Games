@@ -12,25 +12,25 @@ TurnstileGate::~TurnstileGate()
 
 void TurnstileGate::lock()
 {
-	std::cout << "Locked.\n";
+	std::cout << "Gate locked.\n";
 }
 
 void TurnstileGate::unlock()
 {
-	std::cout << "Unlocked.\n";
+	std::cout << "Gate unlocked.\n";
 }
 
 void TurnstileGate::alarm()
 {
-	std::cout << "ALARM!\n";
+	std::cout << "GATE ALARM!\n";
 }
 
 void TurnstileGate::resetAlarm()
 {
-	std::cout << "Alarm reset.\n";
+	std::cout << "Gate alarm reset.\n";
 }
 
 void TurnstileGate::thankYou()
 {
-	std::cout << "Thank you!\n";
+	std::cout << "Thank you for coin!\n";
 }

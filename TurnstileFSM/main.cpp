@@ -7,9 +7,7 @@
 #define KEY4 0x34
 #define ESC 0x1B
 
-// TODO:
-//	- Improve console readability and formatting
-//	- Make consecutive presses of the same key possible
+void printCommands();
 
 int main()
 {
@@ -17,6 +15,8 @@ int main()
 	int previousInput = 0;
 
 	TurnstileFSM stateMachine;
+
+	printCommands();
 
 	while (running)
 	{
@@ -29,6 +29,8 @@ int main()
 			}
 			else
 			{
+				system("cls");
+				printCommands();
 				stateMachine.coinEvent();
 				previousInput = KEY1;
 			}
@@ -43,6 +45,8 @@ int main()
 			}
 			else
 			{
+				system("cls");
+				printCommands();
 				stateMachine.passEvent();
 				previousInput = KEY2;
 			}
@@ -57,6 +61,8 @@ int main()
 			}
 			else
 			{
+				system("cls");
+				printCommands();
 				stateMachine.resetEvent();
 				previousInput = KEY3;
 			}
@@ -71,6 +77,8 @@ int main()
 			}
 			else
 			{
+				system("cls");
+				printCommands();
 				stateMachine.readyEvent();
 				previousInput = KEY4;
 			}
@@ -83,6 +91,13 @@ int main()
 			running = false;
 		}
 
+		// Clear inputs when a key is released
+		else if (!GetAsyncKeyState(KEY1) || !GetAsyncKeyState(KEY2) || 
+			!GetAsyncKeyState(KEY3) || !GetAsyncKeyState(KEY4) || !GetAsyncKeyState(ESC))
+		{
+			previousInput = NULL;
+		}
+
 		else
 		{
 			// Do nothing
@@ -90,4 +105,9 @@ int main()
 	}
 
 	return 0;
+}
+
+void printCommands()
+{
+	std::cout << "Actions:\n1: Coin\n2: Pass\n3: Reset\n4: Ready\n\n";
 }
