@@ -2,12 +2,6 @@
 #include <vector>
 #include "SearchNode.h"
 
-struct vec2
-{
-	int x = 0;
-	int y = 0;
-};
-
 class SearchLevel
 {
 public:
@@ -19,6 +13,5 @@ public:
 
 	bool isWalkable(int x, int y);
 	
-	std::vector<vec2> getAdjacentNodes(int posX, int posY);
+	std::vector<Position> getAdjacentNodes(int posX, int posY);
 };
-

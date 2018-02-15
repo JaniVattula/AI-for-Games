@@ -22,7 +22,7 @@ bool SearchLevel::isWalkable(int x, int y)
 	return false;
 }
 
-std::vector<vec2> SearchLevel::getAdjacentNodes(int posX, int posY)
+std::vector<Position> SearchLevel::getAdjacentNodes(int posX, int posY)
 {
-	return std::vector<vec2>();
+	return std::vector<Position>();
 }
