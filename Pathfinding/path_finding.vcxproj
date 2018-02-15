@@ -19,7 +19,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ClosedList.cpp" />
+    <ClCompile Include="OpenList.cpp" />
     <ClCompile Include="pathfinding.cpp" />
+    <ClCompile Include="SearchLevel.cpp" />
+    <ClCompile Include="SearchNode.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ClosedList.h" />
+    <ClInclude Include="OpenList.h" />
+    <ClInclude Include="SearchLevel.h" />
+    <ClInclude Include="SearchNode.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

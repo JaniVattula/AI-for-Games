@@ -2,14 +2,12 @@
 #include <stdio.h>
 #include <cstdlib>
 #include <assert.h>
-#include "glut\glut.h"
 #include <memory.h>
-
-
+#include "glut\glut.h"
 
 namespace
 {
-	// STUDENT_TODO: Make implementation for doPathFinding function, which writes found path to outputData
+	// TODO: Make implementation for doPathFinding function, which writes found path to outputData
 	void doPathFinding(const uint8_t* inputData, int width, int height, uint8_t* outputData, int startX, int startY, int endX, int endY)
 	{
 		printf("STUDENT_TODO: Do path finding from <%d,%d> to <%d,%d>\n", startX, startY, endX, endY);
@@ -24,7 +22,6 @@ namespace
 		}
 	}
 }
-
 
 namespace
 {
@@ -196,15 +193,21 @@ namespace
 
 
 // Main
-int main(int argc, char ** argv) {
+int main(int argc, char ** argv)
+{
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
 	glutInitWindowSize(2*(512+4), 2*(256+2));
+
 	glutCreateWindow("Pathfinding Demo");
 	glutDisplayFunc(draw);
-	if (!init()) return -1;
+
+	if (!init()) { return -1; };
+
 	glutMainLoop();
+
 	delete inputData;
 	delete outputData;
+
 	return 0;
 }
