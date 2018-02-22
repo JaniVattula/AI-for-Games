@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include "SearchNode.h"
 
 class ClosedList
@@ -11,4 +12,6 @@ public:
 	bool isInClosedList(Position pos);
 	void clear();
 
+private:
+	std::vector<SearchNode*> closedList;
 };
