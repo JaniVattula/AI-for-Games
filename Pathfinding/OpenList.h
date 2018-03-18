@@ -20,7 +20,7 @@ public:
 	void sortOpenList();
 	void insertToOpenList(SearchNode* node);
 	SearchNode* findFromOpenList(Position pos_);
-	SearchNode* removeSmallestF();
+	SearchNode* removeSmallestF();	// TODO Ensure the function is efficient
 
 	bool isEmpty();
 	void clear();
