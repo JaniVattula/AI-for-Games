@@ -6,6 +6,7 @@
 class SearchLevel
 {
 public:
+	SearchLevel(const uint8_t* inputData, int width, int height);
 	SearchLevel();
 	~SearchLevel();
 
@@ -15,4 +16,9 @@ public:
 	bool isWalkable(int x, int y);
 	
 	std::vector<Position> getAdjacentNodes(int posX, int posY);
+
+private:
+	const uint8_t* inputData = 0;
+	int width = 0;
+	int height = 0;
 };

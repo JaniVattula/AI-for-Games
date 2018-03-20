@@ -5,19 +5,26 @@
 #include <memory.h>
 #include "glut\glut.h"
 
+#include "SearchNode.h"
+#include "SearchLevel.h"
+
 namespace
 {
 	// TODO: Make implementation for doPathFinding function, which writes found path to outputData
 	void doPathFinding(const uint8_t* inputData, int width, int height, uint8_t* outputData, int startX, int startY, int endX, int endY)
 	{
-		printf("STUDENT_TODO: Do path finding from <%d,%d> to <%d,%d>\n", startX, startY, endX, endY);
+		//printf("STUDENT_TODO: Do path finding from <%d,%d> to <%d,%d>\n", startX, startY, endX, endY);
+
+		// The seeker is used to find information about the level
+		SearchLevel seeker(inputData, width, height);
+
 		// Make noise for now
-		for (size_t i = 0; i < static_cast<unsigned int>(3 * width * height); i+=3)
+		for (size_t i = 0; i < static_cast<unsigned int>(3 * width * height); i += 3)
 		{
 			int val = rand();
-			outputData[i+0] = val;
-			outputData[i+1] = val;
-			outputData[i+2] = val;
+			outputData[i] = inputData[i];
+			//outputData[i + 1] = inputData[i + 1];
+			//outputData[i + 2] = inputData[i + 2];
 
 		}
 	}

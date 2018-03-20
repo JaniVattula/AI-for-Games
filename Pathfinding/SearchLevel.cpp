@@ -1,10 +1,14 @@
 #include "SearchLevel.h"
 
 
-SearchLevel::SearchLevel()
+SearchLevel::SearchLevel(const uint8_t* inputData, int width, int height)
 {
+	this->inputData = inputData;
+	this->width = width;
+	this->height = height;
 }
 
+SearchLevel::SearchLevel() {}
 SearchLevel::~SearchLevel() {}
 
 // Calculate the actual distance from the pathfinding start point
@@ -47,6 +51,8 @@ float SearchLevel::calculateH(SearchNode* fromNode, SearchNode* toNode)
 
 bool SearchLevel::isWalkable(int x, int y)
 {
+	// If it's a green pixel, we can't walk on it
+	// Use inputData for finding out the value
 	return false;
 }
 
@@ -65,6 +71,7 @@ std::vector<Position> SearchLevel::getAdjacentNodes(int posX, int posY)
 		{
 			if (x != 0 && y != 0)	// Ignore target position
 			{
+				// TODO Check if the node is walkable
 				adjacentNodes[vecIndex].first = (posX + x);
 				adjacentNodes[vecIndex].second = (posY + y);
 				vecIndex++;
