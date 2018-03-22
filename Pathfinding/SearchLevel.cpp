@@ -49,11 +49,24 @@ float SearchLevel::calculateH(SearchNode* fromNode, SearchNode* toNode)
 	return (distanceX * 1.41f);
 }
 
+// Checks the coordinate colors from inputData, (0, 255, 0) is not walkable.
 bool SearchLevel::isWalkable(int x, int y)
 {
+	const uint8_t* pixel = &inputData[3 * (y * width + x)];
+
+	uint8_t red = pixel[0];
+	uint8_t green = pixel[1];
+	uint8_t blue = pixel[2];
+
 	// If it's a green pixel, we can't walk on it
-	// Use inputData for finding out the value
-	return false;
+	if (red == 0 && green == 255 && blue == 0)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
 }
 
 std::vector<Position> SearchLevel::getAdjacentNodes(int posX, int posY)
