@@ -16,13 +16,27 @@ void ClosedList::addToClosedList(SearchNode* node)
 // Iterate through the closed list, checking for a matching position
 bool ClosedList::isInClosedList(Position pos_)
 {
-	for (unsigned int i = 0; i < closedList.size(); i++)
+	if (checkLimit > 0 && closedList.size() > checkLimit)
 	{
-		if (closedList[i]->pos == pos_)
+		for (unsigned int i = (closedList.size() - checkLimit); i < closedList.size(); i++)
 		{
-			return true;
+			if (closedList[i]->pos == pos_)
+			{
+				return true;
+			}
 		}
 	}
+	else
+	{
+		for (unsigned int i = 0; i < closedList.size(); i++)
+		{
+			if (closedList[i]->pos == pos_)
+			{
+				return true;
+			}
+		}
+	}
+
 
 	return false;
 }

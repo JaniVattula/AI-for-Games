@@ -20,10 +20,15 @@ public:
 	void sortOpenList();
 	void insertToOpenList(SearchNode* node);
 	SearchNode* findFromOpenList(Position pos_);
-	SearchNode* removeSmallestF();	// TODO Ensure the function is efficient
+	SearchNode* removeSmallestF();
 
 	bool isEmpty();
 	void clear();
+
+	int getSize()
+	{
+		return openList.size();
+	}
 
 private:
 	std::vector<SearchNode*> openList;

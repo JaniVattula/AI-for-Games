@@ -8,7 +8,6 @@ SearchLevel::SearchLevel(const uint8_t* inputData, int width, int height)
 	this->height = height;
 }
 
-SearchLevel::SearchLevel() {}
 SearchLevel::~SearchLevel() {}
 
 // Calculate the actual distance from the pathfinding start point
@@ -20,19 +19,19 @@ float SearchLevel::calculateG(SearchNode* fromNode, SearchNode* toNode)
 	// Add the distance already traveled to the new travel step (new H)
 	// H will return 1 or 1.41 depending on the direction traveled, but
 	// also works for longer distances (teleportation possibilities?)
-	return (fromNode->G + calculateH(fromNode, toNode));
+	return (fromNode->G + calculateH(fromNode->pos, toNode->pos));
 }
 
 // Calculate the optimal distance to the pathfinding end point
-float SearchLevel::calculateH(SearchNode* fromNode, SearchNode* toNode)
+float SearchLevel::calculateH(Position fromPos, Position toPos)
 {
 	// Distance on X and Y axis is 1
 	// Distance on XY dir is 1.41 (square root of 2)
 	// Calculate optimal theoretical route from fromPos to toPos
 
 	// Calculate the absolute distances for each axis
-	unsigned int distanceX = abs(fromNode->pos.first - toNode->pos.first);
-	unsigned int distanceY = abs(fromNode->pos.second - toNode->pos.second);
+	unsigned int distanceX = abs(fromPos.first - toPos.first);
+	unsigned int distanceY = abs(fromPos.second - toPos.second);
 	
 	// Assume as many XY moves as possible
 	// Add the remaining distance, which is a straight line
@@ -69,9 +68,10 @@ bool SearchLevel::isWalkable(int x, int y)
 	}
 }
 
+// Returns a vector of adjacent, walkable nodes
 std::vector<Position> SearchLevel::getAdjacentNodes(int posX, int posY)
 {
-	int vecIndex = 0;
+	Position tempPos;
 	std::vector<Position> adjacentNodes;
 	adjacentNodes.reserve(8);
 
@@ -82,12 +82,14 @@ std::vector<Position> SearchLevel::getAdjacentNodes(int posX, int posY)
 		// Get positions from -1, 0 and 1 y-distance from target
 		for (int y = -1; y <= 1; y++)
 		{
-			if (x != 0 && y != 0)	// Ignore target position
+			if (x != 0 || y != 0)	// Ignore target position
 			{
-				// TODO Check if the node is walkable
-				adjacentNodes[vecIndex].first = (posX + x);
-				adjacentNodes[vecIndex].second = (posY + y);
-				vecIndex++;
+				if (isWalkable(posX + x, posY + y))
+				{
+					tempPos.first = (posX + x);
+					tempPos.second = (posY + y);
+					adjacentNodes.push_back(tempPos);
+				}
 			}
 		}
 	}

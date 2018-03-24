@@ -7,24 +7,96 @@
 
 #include "SearchNode.h"
 #include "SearchLevel.h"
+#include "OpenList.h"
+#include "ClosedList.h"
 
 namespace
 {
+	OpenList openList;
+	ClosedList closedList;
+
+	SearchNode startNode(Position(1, 126), 0.0f, 0.0f, nullptr);
+	SearchNode* currentNode = &startNode;
+	bool completed = false;
+	std::vector<Position> adjacentNodes;
+
 	// TODO: Make implementation for doPathFinding function, which writes found path to outputData
 	void doPathFinding(const uint8_t* inputData, int width, int height, uint8_t* outputData, int startX, int startY, int endX, int endY)
 	{
-		//printf("STUDENT_TODO: Do path finding from <%d,%d> to <%d,%d>\n", startX, startY, endX, endY);
-
-		// The seeker is used to find information about the level
-		SearchLevel seeker(inputData, width, height);
-
-		// Make noise for now
-		for (size_t i = 0; i < static_cast<unsigned int>(3 * width * height); i += 3)
+		if (completed == false)
 		{
-			int val = rand();
-			outputData[i] = inputData[i];
-			//outputData[i + 1] = inputData[i + 1];
-			//outputData[i + 2] = inputData[i + 2];
+			// The seeker is used to find information about the level
+			SearchLevel seeker(inputData, width, height);
+
+			/************************************************************************/
+			/// DJIKSTRA'S SHORTEST PATH ALGORITHM
+
+			// Add start node and adjacent to OpenNodes
+			adjacentNodes = seeker.getAdjacentNodes(currentNode->pos.first, currentNode->pos.second);
+
+			float deltaG;
+			for (unsigned int i = 0; i < adjacentNodes.size(); i++)
+			{
+				if (adjacentNodes[i].first == currentNode->pos.first || adjacentNodes[i].second == currentNode->pos.second)
+				{
+					deltaG = 1.0f;
+				}
+				else
+				{
+					deltaG = 1.41f;
+				}
+
+				if (closedList.isInClosedList(adjacentNodes[i]) == false && openList.findFromOpenList(adjacentNodes[i]) == nullptr)
+				{
+					openList.insertToOpenList(new SearchNode(adjacentNodes[i], 0.0f, deltaG, currentNode));
+				}
+			}
+
+			closedList.addToClosedList(currentNode);
+			
+			// Find the node with shortest distance to start (first one after sorting)
+			currentNode = openList.removeSmallestF();
+
+			system("cls");
+			printf("DJIKSTRA'S SHORTEST PATH ALGORITHM\n");
+			printf("Open list size: %d\n", openList.getSize());
+			printf("Closed list size: %d\n", closedList.getSize());
+			printf("Current G distance: %.2f\n", currentNode->G);
+
+			/************************************************************************/
+			/// A* ALGORITHM
+
+
+			/// UNDER CONSTRUCTION
+
+			/************************************************************************/
+
+
+			// Coloring the searched area blue
+			outputData[3 * (currentNode->pos.second * width + currentNode->pos.first)] = currentNode->G * 2.55;
+			outputData[3 * (currentNode->pos.second * width + currentNode->pos.first) + 1] = 0;
+			outputData[3 * (currentNode->pos.second * width + currentNode->pos.first) + 2] = (255 - currentNode->G * 2.55);
+
+			// If we have found our end point, stop the search and color the best path yellow
+			if (currentNode->pos.first == endX && currentNode->pos.second == endY)
+			{
+				printf("Search complete!\n");
+				SearchNode* pathNode;
+
+				do 
+				{
+					pathNode = currentNode->prevNode;
+
+					outputData[3 * (pathNode->pos.second * width + pathNode->pos.first)] = 0;
+					outputData[3 * (pathNode->pos.second * width + pathNode->pos.first) + 1] = 255;
+					outputData[3 * (pathNode->pos.second * width + pathNode->pos.first) + 2] = 255;
+
+					currentNode = pathNode;
+
+				} while (currentNode->prevNode != nullptr);	// The path ends back at the start point
+
+				completed = true;
+			}
 
 		}
 	}

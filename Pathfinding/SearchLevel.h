@@ -7,12 +7,12 @@ class SearchLevel
 {
 public:
 	SearchLevel(const uint8_t* inputData, int width, int height);
-	SearchLevel();
 	~SearchLevel();
 
 	float calculateG(SearchNode* fromNode, SearchNode* toNode);
-	float calculateH(SearchNode* fromNode, SearchNode* toNode);
+	float calculateH(Position fromPos, Position toPos);
 
+	// Not walkable if the coordinate pixel is green.
 	bool isWalkable(int x, int y);
 	
 	std::vector<Position> getAdjacentNodes(int posX, int posY);

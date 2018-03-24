@@ -7,6 +7,8 @@ SearchNode::SearchNode(const Position &currentPosition, float _H, float deltaG, 
 	pos = currentPosition;
 	G = 0;
 	H = _H;
+
+	resetPrev(prev, deltaG);
 }
 
 SearchNode::~SearchNode() {}

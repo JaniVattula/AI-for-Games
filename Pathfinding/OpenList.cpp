@@ -37,10 +37,10 @@ SearchNode* OpenList::findFromOpenList(Position pos_)
 // Find the node with the smallest distance and pop it from our vector
 SearchNode* OpenList::removeSmallestF()
 {
-	sortOpenList();		// TODO Not sure if efficient to sort so often
+	sortOpenList();
 
-	SearchNode* smallestFNode = openList[0];	// Index 0 might lead to randomness,
-	openList.erase(openList.begin());			// though hoping it is always smallest
+	SearchNode* smallestFNode = openList[0];
+	openList.erase(openList.begin());
 
 	return smallestFNode;
 }
