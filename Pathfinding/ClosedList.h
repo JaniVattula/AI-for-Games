@@ -19,5 +19,5 @@ public:
 
 private:
 	std::vector<SearchNode*> closedList;
-	int checkLimit = 1000;
+	unsigned int checkLimit = 1000;
 };

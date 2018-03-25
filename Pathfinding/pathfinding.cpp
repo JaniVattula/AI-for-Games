@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <assert.h>
 #include <memory.h>
+#include <ctime>
 #include "glut\glut.h"
 
 #include "SearchNode.h"
@@ -15,23 +16,49 @@ namespace
 	OpenList openList;
 	ClosedList closedList;
 
-	SearchNode startNode(Position(1, 126), 0.0f, 0.0f, nullptr);
+	SearchNode startNode;
+	SearchNode endNode;
 	SearchNode* currentNode = &startNode;
+
 	bool completed = false;
+	bool initialized = false;
+
+	time_t startTime;
+	time_t endTime;
+
 	std::vector<Position> adjacentNodes;
 
-	// TODO: Make implementation for doPathFinding function, which writes found path to outputData
-	void doPathFinding(const uint8_t* inputData, int width, int height, uint8_t* outputData, int startX, int startY, int endX, int endY)
+	void doPathFinding(const uint8_t* inputData, int width, int height, uint8_t* outputData, int startX, int startY, int endX, int endY, char input)
 	{
-		if (completed == false)
-		{
-			// The seeker is used to find information about the level
-			SearchLevel seeker(inputData, width, height);
+		// The seeker is used to find information about the level
+		SearchLevel seeker(inputData, width, height);
 
+		if (initialized == false)
+		{
+			startNode.pos = Position(startX, startY);
+			endNode.pos = Position(endX, endY);
+
+			startNode.H = seeker.calculateH(Position(startX, startY), Position(endX, endY));
+			endNode.H = 0.0f;
+
+			startNode.G = 0.0f;
+			endNode.G = seeker.calculateG(&startNode, &endNode);
+
+			startNode.prevNode = nullptr;
+			endNode.prevNode = nullptr;
+
+			startNode.resetPrev(nullptr, 0.0f);
+
+			time(&startTime);
+			initialized = true;
+		}
+
+		if (completed == false && input == 'a')
+		{
 			/************************************************************************/
 			/// DJIKSTRA'S SHORTEST PATH ALGORITHM
 
-			// Add start node and adjacent to OpenNodes
+			//Add start node and adjacent to OpenNodes
 			adjacentNodes = seeker.getAdjacentNodes(currentNode->pos.first, currentNode->pos.second);
 
 			float deltaG;
@@ -53,24 +80,56 @@ namespace
 			}
 
 			closedList.addToClosedList(currentNode);
-			
+
 			// Find the node with shortest distance to start (first one after sorting)
 			currentNode = openList.removeSmallestF();
 
-			system("cls");
 			printf("DJIKSTRA'S SHORTEST PATH ALGORITHM\n");
 			printf("Open list size: %d\n", openList.getSize());
 			printf("Closed list size: %d\n", closedList.getSize());
 			printf("Current G distance: %.2f\n", currentNode->G);
-
+			printf("Current node X: %d, Y: %d\n", currentNode->pos.first, currentNode->pos.second);
+		}
+			
+		else if (completed == false && input == 'b')
+		{
 			/************************************************************************/
 			/// A* ALGORITHM
 
+			// Add start node and adjacent to OpenNodes
+			adjacentNodes = seeker.getAdjacentNodes(currentNode->pos.first, currentNode->pos.second);
 
-			/// UNDER CONSTRUCTION
+			float deltaG;
+			for (unsigned int i = 0; i < adjacentNodes.size(); i++)
+			{
+				if (adjacentNodes[i].first == currentNode->pos.first || adjacentNodes[i].second == currentNode->pos.second)
+				{
+					deltaG = 1.0f;
+				}
+				else
+				{
+					deltaG = 1.41f;
+				}
+
+				if (closedList.isInClosedList(adjacentNodes[i]) == false && openList.findFromOpenList(adjacentNodes[i]) == nullptr)
+				{
+					openList.insertToOpenList(new SearchNode(adjacentNodes[i], seeker.calculateH(adjacentNodes[i], endNode.pos), deltaG, currentNode));
+				}
+			}
+
+			closedList.addToClosedList(currentNode);
+
+			// Find the node with shortest distance to start (first one after sorting)
+			currentNode = openList.removeSmallestF();
+
+			printf("A* SEARCH ALGORITHM\n");
+			printf("Open list size: %d\n", openList.getSize());
+			printf("Closed list size: %d\n", closedList.getSize());
+			printf("Current G distance: %.2f\n", currentNode->G);
+			printf("Current node X: %d, Y: %d\n", currentNode->pos.first, currentNode->pos.second);
 
 			/************************************************************************/
-
+		}
 
 			// Coloring the searched area blue
 			outputData[3 * (currentNode->pos.second * width + currentNode->pos.first)] = currentNode->G * 2.55;
@@ -81,6 +140,10 @@ namespace
 			if (currentNode->pos.first == endX && currentNode->pos.second == endY)
 			{
 				printf("Search complete!\n");
+				
+				time(&endTime);
+				printf("Operation took %.f seconds.\n", difftime(endTime, startTime));
+				
 				SearchNode* pathNode;
 
 				do 
@@ -97,8 +160,6 @@ namespace
 
 				completed = true;
 			}
-
-		}
 	}
 }
 
@@ -160,18 +221,49 @@ namespace
 	int startY = -1;
 	int endX = -1;
 	int endY = -1;
+	// input for algorithm selection.
+	char input;
+	char mapInput;
 
 	// Initialization
 	bool init()
 	{
+		printf("Select algorithm:\n");
+		printf("a) Djikstra's shortest path algorithm\n");
+		printf("b) A* search algorithm\n");
+
+		input = getchar();
+		while ((getchar()) != '\n');
+		
+		printf("Select map:\n");
+		printf("a) Empty level\n");
+		printf("b) Original map\n");
+		printf("c) Maze\n");
+
+		mapInput = getchar();
+		while ((getchar()) != '\n');
+
 		glMatrixMode(GL_PROJECTION);
 		glOrtho(0, 512 + 4, 256 + 2, 0, -1, 1);
 
 		// Load input file
-		inputTexture = loadBMPTexture("input.bmp", &width, &height, &inputData);
+
+		if (mapInput == 'a')
+		{
+			inputTexture = loadBMPTexture("input_empty.bmp", &width, &height, &inputData);
+		}
+		else if (mapInput == 'b')
+		{
+			inputTexture = loadBMPTexture("input.bmp", &width, &height, &inputData);
+		}
+		else if (mapInput == 'c')
+		{
+			inputTexture = loadBMPTexture("input_maze.bmp", &width, &height, &inputData);
+		}
+
 		if (0 == inputTexture)
 		{
-			printf("Error! Cannot open file: \"input.bmp\"\n");
+			printf("Error! Cannot open input file!\n");
 			return false;
 		}
 
@@ -230,7 +322,7 @@ namespace
 	// Draw/Render
 	void draw() 
 	{
-		doPathFinding(inputData, width, height, outputData, startX, startY, endX, endY);
+		doPathFinding(inputData, width, height, outputData, startX, startY, endX, endY, input);
 
 		// Copy outputData to outputTexture
 		glBindTexture(GL_TEXTURE_2D, outputTexture);

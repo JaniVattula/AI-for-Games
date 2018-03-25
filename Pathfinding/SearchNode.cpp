@@ -12,6 +12,8 @@ SearchNode::SearchNode(const Position &currentPosition, float _H, float deltaG, 
 }
 
 SearchNode::~SearchNode() {}
+SearchNode::SearchNode() {}
+
 float SearchNode::getDistance() const { return F; }
 
 // Calculates total G for this node from the previous node's G value, and updates F

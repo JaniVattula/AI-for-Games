@@ -7,6 +7,7 @@ class SearchNode
 {
 public:
 	SearchNode(const Position &currentPosition, float _H, float deltaG, SearchNode* prev);
+	SearchNode();
 	~SearchNode();
 
 	float getDistance() const;	// Returns approximation of the total path cost
